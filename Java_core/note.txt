@@ -1,0 +1,136 @@
+I. Intro
+1. Java là gì
+2. JDK, JRE và JVM
+- JDK (Java Development Kit) = JRE + required library to DEVELOP java application
+- JRE (Java Runtime Environment) = JVM + required library to RUN application
+- JVM (Java Virtual Machine)
+JDK ⊃ JRE ⊃ JVM
+3. Install
+- IDEs of java
+- Install
+4. Class and Objects
+- Class declaration syntax: 
+<access modifier> class <class_name> [extends <super_class_name> implements <interface_name>]{ // khai báo lớp
+  <static initializer block> // khối khởi tạo tĩnh, chạy 1 lần duy nhất khi class được nạp
+  <ananymous_block> // khối ẩn danh, chạy mỗi khi đối tượng được tạo
+  <constructor_declarations> // hàm khởi tạo, trùng tên class
+  <field_declarations (Static or Non-Static)> // biến thành viên
+  <method_declarations (Static or Non-Static)> // method thành viên
+  <inner_class_declarations> // lớp lồng trong class
+  <nested_interface_declarations> // interface bên trong class
+  variables_inside_class(Static or Non Static)
+}
+VD: public class car extends Vehicle implements IMove {
+  ...
+}
+- Objects: instance of class
+  Declaration syntax: <class_name> <object_name> = new <constructor_name> (arguments);
+5. Variables
+- Variables declaration syntax: [access_modifier] [static] [final] type|Class_name field_name [= initial value];
+- Constructor declaration syntax: <class_name> ([parameter]) {
+  // Initialization code
+}
+  + Default constructor 
+  + Parameterized constructor
+  + Constructor chaining là khi một constructor gọi một constructor khác trong cùng một class, dùng từ khóa this(...) (Lệnh this(...) phải nằm ở dòng đầu tiên trong constructor)
+- Method declaration syntax: access_specifier return_type method_name (parameter_list){...}
+  Java methods:
+  + Standard library methods
+  + User defined methods: 
+    . Static methods // Gắn liền với class, không cần tạo object để gọi.
+    . Instance methods // Muốn gọi phải tạo object trước.
+- Overloading of methods: định nghĩa nhiều phương thức cùng tên trong cùng một class, nhưng khác nhau ở số lượng, kiểu tham số hoặc thứ tự tham số.
+- Keyword "this": được dùng như một tham chiếu (reference) đến đối tượng hiện tại (current object) — tức là object đang gọi method hoặc constructor
+  + Tham chiếu biến instance: this.name = name;
+  + Gọi constructor khác: this("John", 18);
+  + Truyền object hiện tại: otherObj.setStudent(this);
+  + Gọi method trong cùng object: this.printInfo(); (có thể bỏ this. nếu không mâu thuẫn tên)
+6. Datatype and Operator
+- Datatype
+  + Primitive (Nguyên thủy): kiểu dữ liệu cơ bản nhất, được Java cung cấp sẵn, không phải là đối tượng
+  + Non-Primitive (Kiểu tham chiếu/đối tượng)
+- Operator
+
+II. Câu lệnh điều khiển
+1. Boolean expressions
+- So sánh xâu: equals(String), equalsIgnoreCase(String)
+- So sánh boolean: !
+- Toán tử logic: &&, ||, !
+2. Câu lệnh lựa chọn
+- if
+- switch case
+3. Loop/Iteration statements
+- while
+- do while
+- for
+- nested loop 
+4. Lệnh rẽ nhánh/chuyển
+- break (with/without labeled)
+- continue
+- return
+
+III. Working with String, Array and Date
+1. Strings
+- String class: method length(), substring(int beginIndex), contains(CharSequence s), isEmpty(), replace(char old, char new), split(String regex), valueOf(int value)
+- Create, join and append String
+- String compare
+  + ==: So sánh địa chỉ vùng nhớ (reference).
+  + .equals(): So sánh nội dung chuỗi và phân biệt chữ hoa/thường.
+  + .equalsIgnoreCase(): So sánh nội dung chuỗi nhưng không phân biệt chữ hoa/thường.
+  + .compareTo(): So sánh 2 chuỗi theo thứ tự từ điển
+  + .startsWith(): kiểm tra chuỗi hiện tại có bắt đầu bằng một chuỗi con cụ thể không
+2. Arrays
+- A array is an object that contains one or more item called elements
+- Mảng 1 chiều: type[] arrayName; hoặc type arrayName[];
+- Mảng 2 chiều: <datatype>[][] arrayName = new datatype[rowsize][colsize]
+- Array class: contains several static methods that help you to fill, compare, copy, sort and search arrays.
+- So sánh 2 mảng 
+3. Working with Date/Time APIs
+- Java don’t have a dates and times primitive data type
+- Class: LocalDate, TimeDate, LocalDateTime
+- Enumeration: Month, DateOfWeek
+- static method: now(), of(parameter), parser(String)
+- format dates and times: ofLocalizedDate(dateStyle), ofLocalizedTime(timeStyle), ofLocalizedDateTime( dateTimeStyle), ofLocalizedDateTime(dateStyle, timeStyle)
+
+IV. Kế thừa
+1. Intro
+- Kiểu kế thừa: single, multilevel, phân cấp (không có 1 class kế thừa từ 2 class)
+2. Kỹ năng cơ bản làm việc với kế thừa
+- Subclass: access modifier, using super class
+  Syntax: public class <class_name> extends <name_supper_class> {
+    ...
+  }
+- super keyword: Declaration syntax
+  + super.<variable_name>;
+  + super([zero or more arguments]);
+  + super.<method_name>([zero or more arguments]);
+
+VIII. Handle exceptions
+1. Intro
+- Exception (ngoại lệ) là một tình huống bất thường xảy ra khi chương trình đang chạy, khiến luồng thực thi (program flow) bị gián đoạn.
+- Nguyên nhân
+  + Programming Errors – Lỗi lập trình
+  + Client Code Errors – Lỗi từ mã phía người dùng
+  + Errors Beyond the Control of Program – Lỗi ngoài tầm kiểm soát
+- Hệ thống phân cấp của các đối tượng Throwable trong Java (Throwable hierarchy):
+  Throwable – Gốc của hệ thống lỗi và ngoại lệ. Trong Java, mọi đối tượng có thể bị ném (throw) trong quá trình xử lý lỗi đều kế thừa từ lớp Throwable. Throwable có hai nhánh con chính:
+  + Error: lỗi nghiêm trọng xảy ra bên ngoài phạm vi kiểm soát của chương trình. Gọi là Unchecked Errors – Không cần hoặc không nên bắt (try-catch). Ví dụ: OutOfMemoryError, StackOverflowError
+  + Exception: Đại diện cho các ngoại lệ (exception) trong quá trình thực thi chương trình. Có thể xử lý được bằng try-catch.
+    . Checked Exceptions (Ngoại lệ kiểm tra được): Trình biên dịch ép buộc bạn phải xử lý bằng try-catch hoặc throws. Nếu không xử lý, chương trình sẽ không biên dịch được. Ví dụ: IOException – lỗi khi đọc/ghi file, SQLException – lỗi liên quan đến cơ sở dữ liệu
+    . Unchecked Exceptions (Ngoại lệ không kiểm tra): Là các lớp con của RuntimeException. Trình biên dịch không bắt buộc phải xử lý, nhưng nếu không xử lý sẽ gây crash lúc runtime. Ví dụ: NullPointerException, ArrayIndexOutOfBoundsException, ArithmeticException
+- Checked Exception (Ngoại lệ được kiểm tra)
+  Đặc điểm:
+    + Là một phần của chữ ký phương thức: Nếu phương thức có thể ném checked exception, bạn phải khai báo trong phần định nghĩa bằng throws.
+    + Được kiểm tra tại thời điểm biên dịch (compile-time): Trình biên dịch sẽ yêu cầu bạn xử lý hoặc khai báo nó. Nếu không, chương trình sẽ không biên dịch được.
+    + Lập trình viên bắt buộc phải xử lý ngoại lệ bằng try-catch hoặc throws.
+    + Đặc trưng riêng của Java, nhiều ngôn ngữ khác không phân biệt loại này.
+- Unchecked Exception (Ngoại lệ không được kiểm tra)
+  Đặc điểm:
+    + Là các lớp con của RuntimeException.
+    + Không cần khai báo trong chữ ký phương thức.
+    + Không bị kiểm tra tại thời điểm biên dịch, nên nếu không cẩn thận sẽ gây lỗi khi chạy (runtime).
+    + Thường do lỗi lập trình: quên kiểm tra null, sai chỉ số mảng, chia cho 0...
+- Cách Java lan truyền ngoại lệ (exception propagation) – tức là khi xảy ra lỗi, Java sẽ tìm nơi phù hợp để xử lý lỗi theo hướng từ dưới lên (stack trace): Khi 1 method gây ra lỗi (throw exception) mà không tự xử lý lỗi, Java sẽ tìm ngược lên các phương thức gọi nó (call stack) để xem có nơi nào xử lý lỗi (exception handler) không
+  + Throw the exception: Một phương thức gây ra lỗi (ví dụ chia cho 0, hoặc truy cập null). Không có try-catch ở đó → lỗi được "ném lên" (throw lên) phương thức gọi nó. Nếu phương thức gọi cũng không xử lý, nó lại tiếp tục ném lỗi lên tiếp. Cứ thế cho tới main() – nếu main không xử lý thì chương trình bị crash và in stack trace.
+  + Catch the exception: Java bắt đầu tìm kiếm nơi xử lý lỗi từ nơi lỗi xảy ra trở lên. Nếu thấy một phương thức có try-catch phù hợp, lỗi được bắt lại (caught) ở đó. Nếu không tìm thấy nơi nào xử lý, chương trình sẽ kết thúc bất thường (terminate with error).
+
