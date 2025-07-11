@@ -1,0 +1,97 @@
+1. Branches 
+1.1 Tạo một nhánh mới
+- Để tạo một nhánh mới, sử dụng lệnh git branch [tên-nhánh]. Ví dụ, để tạo một nhánh tên là testing: $ git branch testing
+- Lệnh này tạo ra một con trỏ mới trỏ đến cùng một commit đang ở hiện tại. 
+- Làm thế nào Git biết đang ở nhánh nào: Git sử dụng một con trỏ đặc biệt gọi là HEAD. HEAD không phải là một nhánh, mà nó trỏ đến nhánh cục bộ mà bạn đang làm việc. 
+1.2 Chuyển đổi giữa các nhánh
+- Để chuyển sang một nhánh khác, bạn sử dụng lệnh git checkout [tên-nhánh]. Ví dụ, để chuyển sang nhánh testing: $ git checkout testing
+- Sau lệnh này, con trỏ HEAD sẽ di chuyển và trỏ đến nhánh testing.
+- Ý nghĩa của việc này là gì: Bây giờ, khi bạn thực hiện một commit mới, nhánh testing sẽ tiến lên phía trước, trong khi nhánh master vẫn ở vị trí cũ.
+1.3 Tóm tắt
+
+2. Basic Branching and Merging
+2.1. Basic Branching
+- Giả sử bạn đang làm việc trên nhánh master và cần xử lý một vấn đề (issue 53). Bạn tạo một nhánh mới để làm việc trên đó: $ git checkout -b iss53
+Lệnh này là viết tắt của hai lệnh: git branch iss53 và git checkout iss53
+- Đột nhiên có vấn đề cần sửa ngay => quay lại nhánh master => tạo nhánh hotfix, sửa trên nhánh hotfix. Quay lại master và gộp (merge) nhánh hotfix:
+  $ git checkout master
+  $ git merge hotfix
+- Vì nhánh hotfix được tạo trực tiếp từ master và master chưa có commit nào mới kể từ đó, Git sẽ thực hiện một "fast-forward merge". Con trỏ master chỉ đơn giản là di chuyển về phía trước để trỏ đến cùng commit với hotfix.
+- Sau khi gộp, nhánh hotfix không còn cần thiết nữa, bạn có thể xóa nó đi: $ git branch -d hotfix
+2.2. Basic Merging
+- Bây giờ, bạn có thể quay lại công việc đang dang dở trên nhánh iss53, hoàn thành nó và commit: 
+  $ git checkout iss53
+  $ git commit -a -m 'finished the new footer [issue 53]'
+- Công việc trên nhánh iss53 đã hoàn thành. Bây giờ bạn muốn gộp nó vào master.
+  $ git checkout master
+  $ git merge iss53
+- Lần này, việc gộp không phải là "fast-forward" vì lịch sử đã phân nhánh. Git sẽ thực hiện một "three-way merge" (gộp 3 chiều), tạo ra một commit gộp mới (C6) có hai commit cha là C4 (từ master) và C5 (từ iss53).
+
+3. Branch Management
+Git cung cấp nhiều công cụ để quản lý các nhánh:
+  git branch: Liệt kê tất cả các nhánh cục bộ.
+  git branch -v: Liệt kê các nhánh cùng với commit cuối cùng của chúng.
+  git branch --merged: Hiển thị các nhánh đã được gộp vào nhánh hiện tại.
+  git branch --no-merged: Hiển thị các nhánh chưa được gộp vào nhánh hiện tại.
+  git branch -d [tên-nhánh]: Xóa một nhánh đã được gộp.
+
+4. Quy trình làm việc với Branch
+4.1. Nhánh tồn tại lâu dài (Long-Running Branches)
+- Nhiều dự án Git có các nhánh tồn tại lâu dài, đại diện cho các giai đoạn khác nhau của quá trình phát triển. Ví dụ, một quy trình phổ biến là sử dụng:
+  + master: Chỉ chứa mã nguồn hoàn toàn ổn định, sẵn sàng để phát hành.
+  + develop: Nhánh tích hợp cho các tính năng mới, có thể chưa ổn định.
+  + Các nhánh topic (chủ đề): Nhánh tồn tại ngắn hạn để phát triển các tính năng cụ thể, sau đó được gộp vào develop.
+- Khi một tính năng trên nhánh topic hoàn thành, nó sẽ được gộp vào develop. Khi develop đạt đến một điểm ổn định, nó sẽ được gộp vào master để tạo một bản phát hành mới.
+4.2 Nhánh theo chủ đề (Topic Branches)
+Đây là các nhánh tồn tại ngắn hạn được tạo ra để thực hiện một tính năng hoặc một công việc cụ thể. Chúng rất hữu ích để thử nghiệm ý tưởng mới mà không làm ảnh hưởng đến các nhánh chính. Nếu ý tưởng không thành công, có thể dễ dàng xóa nhánh đó đi. 
+
+5. Nhánh từ xa (Remote Branches)
+Nhánh từ xa là các tham chiếu đến trạng thái của các nhánh trên kho lưu trữ từ xa.
+- Khi git clone một kho lưu trữ, Git tự động tạo một nhánh cục bộ master theo dõi nhánh master trên remote (được đặt tên là origin/master).
+- Công việc trên kho lưu trữ cục bộ và từ xa có thể phân kỳ. Ví dụ, có thể tạo commit mới trên nhánh master cục bộ, trong khi người khác đã push các commit mới lên master trên remote.
+- Lệnh git fetch sẽ cập nhật các tham chiếu từ xa (origin/master). Nó tải về các dữ liệu mới từ remote nhưng không tự động gộp vào công việc của bạn.
+- Có thể thêm nhiều remote khác nhau để cộng tác với nhiều nhóm.
+
+6. Rebasing
+- Rebase là một cách khác để tích hợp các thay đổi từ một nhánh này vào một nhánh khác.
+- Giả sử lịch sử đã phân nhánh: có các commit mới trên master (C3) và experiment (C4).
+- Cách thông thường để tích hợp là sử dụng merge:
+  $ git checkout master
+  $ git merge experiment
+Thao tác này sẽ tạo một commit gộp mới (C5) và giữ nguyên lịch sử phân nhánh.
+- Thay vì gộp, có thể rebase nhánh experiment lên trên master
+  $ git checkout experiment
+  $ git rebase master
+Lệnh này lấy các thay đổi đã được tạo ra trên experiment (commit C4) và áp dụng lại chúng lên trên đỉnh của master. Kết quả là một lịch sử tuyến tính, sạch sẽ hơn, như thể các thay đổi trên experiment được thực hiện ngay sau master.
+VD:
+  + Giả sử em đang làm việc trên nhánh feature, bắt đầu từ main:
+main:    A---B---C
+                   \
+feature:            D---E
+  + Giờ main có thêm commit F mới:
+main:    A---B---C---F
+                   \
+feature:            D---E
+  + Nếu em merge main vào feature:
+feature (after merge):
+A---B---C---F
+            \ 
+             D---E
+              \
+               M   ← commit merge
+  + Nếu em rebase feature lên main:
+feature (after rebase):
+A---B---C---F---D'---E'
+D', E' là bản sao của D, E nhưng được áp dụng lại trên F
+- Khi nào dùng rebase?
+  + Khi muốn giữ lịch sử Git sạch, tuyến tính.
+  + Khi đang làm việc độc lập trên nhánh riêng, chưa push lên remote.
+  + Trước khi merge vào main, để gọn gàng.
+- Cảnh báo
+  + Không rebase nhánh đã push và người khác đang dùng — vì rebase sẽ thay đổi lịch sử commit, gây xung đột cho đồng đội.
+  + Dùng rebase giống như "viết lại quá khứ", nên cần cẩn thận.
+- Cách dùng lệnh rebase: Di chuyển nhánh hiện tại lên trên nhánh main mới nhất
+  git checkout feature
+  git fetch origin
+  git rebase origin/main
+

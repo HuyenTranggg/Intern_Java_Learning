@@ -1,0 +1,106 @@
+1. Luồng làm việc cơ bản
+- Kho lưu trữ cục bộ bao gồm ba "cây" (trees) được Git duy trì:
+  + Working Directory (Thư mục làm việc), nơi chứa các tệp thực tế mà bạn đang chỉnh sửa
+  + Index (chỉ mục), hoạt động như một khu vực chuẩn bị (staging area)
+  + HEAD, là một con trỏ trỏ đến commit cuối cùng mà bạn đã thực hiện
+- Quy trình làm việc cơ bản trong Git diễn ra như sau:
+  + Các thay đổi được thực hiện trên các tệp trong Working Directory.
+  + Lệnh git add được sử dụng để đưa các thay đổi từ Working Directory vào Index (Staging Area). Đây là bước chuẩn bị cho những gì sẽ được đưa vào commit tiếp theo.
+  + Lệnh git commit sẽ lấy tất cả những gì có trong Index, tạo một "snapshot" và lưu nó vào kho lưu trữ cục bộ. HEAD sẽ di chuyển để trỏ đến commit mới này.
+  + (Tùy chọn) Các thay đổi từ kho lưu trữ cục bộ có thể được đẩy lên một kho lưu trữ từ xa (remote repository) để chia sẻ với người khác.
+
+2. Kho lưu trữ Git (Git repository)
+
+3. Create a new repository
+- Để bắt đầu theo dõi một dự án hiện có bằng Git, bạn cần vào thư mục của dự án đó và gõ lệnh: $ git init
+- Lệnh này tạo ra một thư mục con mới tên là .git, chứa tất cả các tệp cần thiết cho kho lưu trữ – đây là một bộ khung (skeleton) của một kho lưu trữ Git. Tại thời điểm này, chưa có gì trong dự án của bạn được theo dõi.
+
+4. Clone an existing repository
+- Tạo một thư mục tên là "libgit2", khởi tạo một thư mục .git bên trong nó, kéo toàn bộ dữ liệu cho kho lưu trữ đó về, và "check out" một bản sao làm việc của phiên bản mới nhất: $ git clone https://github.com/libgit2/libgit2
+- Sao chép kho lưu trữ vào một thư mục có tên khác => chỉ định tên đó như một tùy chọn dòng lệnh: $ git clone https://github.com/libgit2/libgit2 mylibgit
+
+5. Recording changes to the Repository
+5.1. File Status Lifecycle (Vòng đời trạng thái của tệp)
+Mỗi tệp trong thư mục làm việc có thể ở một trong các trạng thái sau:
+- Untracked (Chưa được theo dõi): Tệp mới, chưa từng được thêm vào Git.
+- Unmodified (Không bị thay đổi): Tệp đã được commit và chưa bị chỉnh sửa kể từ lần commit cuối.
+- Modified (Đã bị thay đổi): Tệp đã được commit nhưng đã bị chỉnh sửa.
+- Staged (Đã được chuẩn bị): Tệp đã được đánh dấu trong phiên bản hiện tại để được đưa vào lần commit tiếp theo.
+5.2. Kiểm tra trạng thái các tệp
+Công cụ chính sử dụng để xác định trạng thái của các tệp là lệnh git status
+5.3. Theo dõi tệp mới (Tracking New Files)
+Để bắt đầu theo dõi một tệp mới, bạn sử dụng lệnh git add. 
+Để theo dõi tệp README, bạn chạy lệnh: $ git add README
+5.4. Chuẩn bị các tệp đã sửa đổi (Staging Modified Files)
+Nếu thay đổi một tệp đã được theo dõi trước đó, git status sẽ hiển thị tệp đó trong mục "Changes not staged for commit". Bạn cần chạy git add một lần nữa để đưa những thay đổi này vào staging area.
+5.5. Trạng thái ngắn gọn (Short Status)
+Git cung cấp cờ trạng thái ngắn gọn (-s hoặc --short) để bạn có thể xem các thay đổi của mình một cách gọn gàng hơn:
+- M (cột phải): Tệp đã được sửa đổi nhưng chưa được staged.
+- MM: Tệp đã được sửa đổi, staged, và sau đó lại được sửa đổi tiếp.
+- A: Tệp mới đã được staged.
+- ??: Tệp chưa được theo dõi.
+5.6. Bỏ qua tệp (Ignoring Files)
+Thường có những tệp bạn không muốn Git tự động thêm vào hoặc hiển thị là chưa được theo dõi, chẳng hạn như tệp log hoặc các tệp được tạo bởi hệ thống build. Trong trường hợp này, bạn có thể tạo một tệp tên là .gitignore và liệt kê các mẫu tệp cần bỏ qua.
+5.7. Commit các thay đổi của bạn (ở local)
+- Cách đơn giản nhất để commit là gõ git commit. Lệnh này sẽ mở trình soạn thảo văn bản để bạn nhập thông điệp commit.
+- Ngoài ra, có thể nhập thông điệp commit trực tiếp trên dòng lệnh bằng cờ -m: $ git commit -m "Story 182: Fix benchmarks for speed"
+- Bỏ qua Staging Area: Thêm tùy chọn -a vào lệnh git commit sẽ khiến Git tự động "stage" mọi tệp đã được theo dõi trước đó trước khi thực hiện commit, cho phép bạn bỏ qua bước git add: $ git commit -a -m 'added new benchmarks'
+5.8. Xóa tệp (Removing Files)
+- Nếu bạn chỉ xóa tệp khỏi thư mục làm việc (ví dụ bằng lệnh rm), git status sẽ hiển thị tệp đó là "deleted" trong khu vực "unstaged".
+- Để Git ghi nhận việc xóa tệp, bạn nên dùng lệnh git rm. Lệnh này sẽ xóa tệp khỏi thư mục làm việc và đồng thời đưa việc xóa đó vào staging area.
+- Nếu bạn muốn xóa một tệp khỏi Git (ngừng theo dõi) nhưng vẫn giữ nó trong thư mục làm việc, hãy sử dụng tùy chọn --cached: $ git rm --cached README
+
+6. Xem lịch sử Commit
+git log -p -2: Hiển thị 2 commit gần nhất cùng với các thay đổi (diff/patch) của chúng.
+git log --stat: Hiển thị thống kê rút gọn cho mỗi commit.
+git log --pretty=oneline: Hiển thị mỗi commit trên một dòng.
+git log --pretty=format:"%h %s" --graph: Hiển thị lịch sử dưới dạng đồ thị với định dạng tùy chỉnh.
+git log --since=2.weeks: Chỉ hiển thị các commit trong 2 tuần qua.
+
+7. Hoàn tác các thay đổi (Undoing Things)
+7.1. Bỏ một tệp đã Staged (Unstaging a Staged File)
+Nếu bạn vô tình "stage" một tệp mà bạn không muốn commit, bạn có thể sử dụng git reset HEAD <file>... để đưa nó trở lại trạng thái "modified".
+7.2. Sửa đổi commit cuối cùng
+- Nếu bạn vừa commit và nhận ra mình quên thêm một tệp, bạn có thể git add tệp đó và chạy: $ git commit --amend
+- Lệnh này sẽ gộp các thay đổi mới vào commit cuối cùng thay vì tạo một commit mới.
+7.3. Hoàn tác một tệp đã sửa đổi (Putting back a Modified File)
+- Nếu bạn nhận ra mình không muốn giữ những thay đổi đã thực hiện trên một tệp trong thư mục làm việc, bạn có thể hoàn tác chúng bằng lệnh: $ git checkout -- <file>
+- Lệnh này sẽ thay thế tệp trong thư mục làm việc bằng phiên bản từ commit cuối cùng (HEAD), loại bỏ tất cả các thay đổi cục bộ.
+
+8. Làm việc với Remotes
+- Luồng làm việc với Remote (ví dụ trên GitHub):
+  + Fork: Tạo một bản sao của kho lưu trữ của người khác trên tài khoản của bạn.
+  + Clone: Sao chép kho lưu trữ đã "fork" về máy tính của bạn. Remote mặc định được tạo ra có tên là origin.
+  + Push/Pull: Bạn đẩy (push) các thay đổi từ máy cục bộ lên origin và kéo (pull) các cập nhật.
+  + Upstream: Bạn có thể thêm một remote trỏ đến kho lưu trữ gốc (của người khác) và đặt tên là upstream để kéo các thay đổi mới nhất từ dự án gốc về.
+- Các lệnh Remote phổ biến:
+  git remote -v: Hiển thị các remote của bạn.
+  git remote add [tên] [url]: Thêm một remote mới.
+  git fetch [tên-remote]: Lấy tất cả dữ liệu từ remote nhưng không tự động hợp nhất.
+  git push [tên-remote] [tên-nhánh]: Đẩy các thay đổi của bạn lên remote.
+  git remote show [tên-remote]: Xem thông tin chi tiết về một remote.
+  git remote rename [tên-cũ] [tên-mới]: Đổi tên một remote.
+
+9. Gắn thẻ (Tagging)
+- Git có khả năng gắn thẻ (tag) các điểm cụ thể trong lịch sử để đánh dấu chúng là quan trọng. Thông thường, mọi người sử dụng chức năng này để đánh dấu các điểm phát hành (v1.0, v1.2, v.v.).
+- Các lệnh Tagging phổ biến:
+  git tag: Liệt kê tất cả các thẻ.
+  git tag -a v1.4 -m "my version 1.4": Tạo một "annotated tag" (thẻ có chú thích, chứa siêu dữ liệu).
+  git tag v1.4-lw: Tạo một "lightweight tag" (thẻ nhẹ, chỉ là một con trỏ đến một commit).
+  git show v1.2: Xem thông tin của một thẻ.
+  git push origin --tags: Đẩy tất cả các thẻ lên remote.
+  git checkout -b version2 v2.0.0: Tạo một nhánh mới từ một thẻ.
+
+10. Bí danh trong Git (Git Aliases)
+- Bí danh (alias) là một mẹo nhỏ có thể giúp trải nghiệm Git của bạn đơn giản, dễ dàng và quen thuộc hơn. Bạn có thể thêm bí danh của riêng mình vào Git.
+- Ví dụ, để tạo các lệnh viết tắt:
+  $ git config --global alias.co checkout
+  $ git config --global alias.br branch
+  $ git config --global alias.ci commit
+  $ git config --global alias.st status
+- Sau khi cài đặt, bạn có thể gõ git st thay vì git status.
+- Bạn cũng có thể tạo bí danh cho các lệnh phức tạp hơn, ví dụ như lệnh "unstage": $ git config --global alias.unstage 'reset HEAD --'
+Bây giờ, hai lệnh sau đây sẽ tương đương:
+  $ git unstage fileA
+  $ git reset HEAD -- fileA
+

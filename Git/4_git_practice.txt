@@ -1,0 +1,38 @@
+1. Tương tác với Github
+1.1. Tạo tài khoản Github
+1.2. Tạo repository mới
+- Sử dụng giao diện web của GitHub: tạo repo mới
+- Sử dụng dòng lệnh: đẩy một dự án đã có trên máy lên một kho lưu trữ mới trên GitHub
+  $ git init
+  $ git add .
+  $ git commit -m "First commit"
+  $ git remote add origin <remote_repository_URL>
+  $ git push origin master
+1.3. Clone
+  $ git clone <URL của repository> (đặt tên remote là origin)
+1.4. Commit đầu tiên
+  $ git add .
+  $ git commit -m "Add existing file"
+1.5. Đẩy lên Github
+  $ git push origin <your-branch>
+1.6. Create pull request
+Pull Request (PR) là cách bạn đề xuất các thay đổi của mình và yêu cầu người khác xem xét và gộp chúng vào một nhánh khác.
+- Trong menu "Branch", chọn nhánh chứa các commit của bạn.
+- Ở bên phải của menu Branch, nhấp vào New pull request.
+- Sử dụng menu thả xuống base branch để chọn nhánh bạn muốn gộp các thay đổi của mình vào (ví dụ: master hoặc develop).
+- Sử dụng menu thả xuống compare branch để chọn nhánh chứa các thay đổi của bạn (nhánh topic của bạn).
+- Nhập tiêu đề và mô tả cho pull request của bạn.
+- Nhấp vào Create pull request.
+1.7. Review pull request
+- Khi xem xét một pull request, có thể để lại nhận xét và quyết định trạng thái của nó.
+- Một đánh giá (review) có ba trạng thái khả thi:
+  + Comment: Gửi phản hồi chung mà không phê duyệt hoặc yêu cầu thay đổi rõ ràng.
+  + Approve: Gửi phản hồi và phê duyệt việc gộp các thay đổi được đề xuất.
+  + Request changes: Gửi phản hồi về những điều cần phải được giải quyết trước khi pull request có thể được gộp.
+- Bạn có thể xem tất cả các bài đánh giá mà một pull request đã nhận được trong dòng thời gian "Conversation". Hộp gộp (merge box) của pull request sẽ hiển thị trạng thái tổng thể của các bài đánh giá.
+
+2. Các công cụ git khác
+Ngoài dòng lệnh, Git còn cung cấp các công cụ đồ họa để hỗ trợ công việc.
+2.1. Gitk
+2.2. Git gui
+

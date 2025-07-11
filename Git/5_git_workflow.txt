@@ -1,0 +1,66 @@
+1. Sơ đồ tổng quan về quy trình làm việc
+- Trên máy cục bộ (Local):
+  + Working (Thư mục làm việc): Nơi trực tiếp chỉnh sửa mã nguồn.
+  + Staging (Khu vực chuẩn bị): Nơi chuẩn bị các thay đổi để commit. Lệnh add sẽ chuyển thay đổi từ Working sang Staging. Lệnh reset sẽ làm ngược lại.
+  + Local repo (Kho lưu trữ cục bộ): Nơi lưu trữ lịch sử commit trên máy của bạn. Lệnh commit sẽ lưu các thay đổi từ Staging vào đây. Lệnh checkout sẽ lấy một phiên bản từ repo ra thư mục làm việc.
+- Trên GitHub:
+  + Your GitHub repo (Kho lưu trữ GitHub của bạn): Đây là bản "fork" của kho lưu trữ chính, nằm trên tài khoản GitHub cá nhân của bạn. Bạn push các commit từ kho lưu trữ cục bộ lên đây.
+  + Công ty GitHub repo (Kho lưu trữ GitHub của công ty): Đây là kho lưu trữ trung tâm, chính thức của dự án.
+    . Bắt đầu bằng cách fork kho lưu trữ này về tài khoản của mình.
+    . Bạn pull các cập nhật từ kho lưu trữ này về máy cục bộ.
+    . Bạn tạo pull request để đề xuất gộp các thay đổi từ kho lưu trữ của bạn vào kho lưu trữ của Công ty.
+  + Lệnh clone được sử dụng để sao chép một kho lưu trữ từ GitHub (thường là kho lưu trữ của bạn) về máy cục bộ.
+
+2. Các bước chi tiết trong quy trình làm việc
+- Fork: Tạo một bản sao của kho lưu trữ dự án (ví dụ: gdo/project-a) vào tài khoản GitHub cá nhân của bạn (ví dụ: trang/project-a). Bạn sẽ có toàn quyền trên bản sao này.
+- Clone: Sao chép kho lưu trữ đã "fork" (trên tài khoản của bạn) về máy tính cục bộ => Tạo một kho lưu trữ cục bộ trên máy tính để bạn có thể làm việc trực tiếp. Kho lưu trữ này sẽ tự động có một "remote" tên là origin trỏ đến kho lưu trữ đã fork của bạn (git clone url)
+- Thêm remote "gdo": Thêm một remote mới trỏ đến kho lưu trữ gốc của gdo => Cho phép bạn kéo (pull) các cập nhật mới nhất từ kho lưu trữ chính của dự án về máy cục bộ để đảm bảo công việc của bạn luôn đồng bộ với những người khác ($ git remote add gdo https://github.com/gdo/<repo-name>)
+- Checkout -b new_branch: Tạo một nhánh mới để phát triển tính năng => Cách ly công việc của bạn trên một nhánh riêng để không làm ảnh hưởng đến nhánh chính (master hoặc develop). Đặt tên nhánh rõ ràng theo tính năng bạn đang làm (ví dụ: feature/user-login) ($ git checkout -b new_branch_name)
+- Add/Commit: Thực hiện các thay đổi, sau đó thêm và commit chúng => Lưu lại tiến trình công việc của bạn vào lịch sử của nhánh mới
+($ git add .
+$ git commit -m "Your descriptive commit message")
+- Rebase master: Cập nhật nhánh của bạn với những thay đổi mới nhất từ nhánh master của kho lưu trữ gdo. Đây là một bước quan trọng để giữ lịch sử commit sạch sẽ và tuyến tính. (Hiểu đơn giản, rebase là cách “chồng commit của mình lên trên commit mới nhất của người khác” — như thể mình là người viết sau cùng.)
+  + checkout master: Chuyển sang nhánh master cục bộ.
+  + pull gdo master: Kéo các thay đổi mới nhất từ nhánh master của remote gdo (kho lưu trữ chính) về nhánh master cục bộ của bạn.
+  + checkout new_branch: Chuyển về lại nhánh tính năng của bạn.
+  + rebase master: Áp dụng lại các commit của bạn lên trên đỉnh của nhánh master vừa được cập nhật.
+- Xử lý xung đột (If conflict): Trong quá trình rebase, có thể xảy ra xung đột nếu cả bạn và người khác cùng thay đổi một phần của tệp.
+  + (no branch): Git sẽ tạm dừng rebase và bạn sẽ ở trong trạng thái không thuộc nhánh nào.
+  + fix conflict: Mở các tệp bị xung đột, giải quyết các mâu thuẫn theo cách thủ công.
+  + add: Sau khi giải quyết xong, sử dụng git add <file_name> để đánh dấu là đã giải quyết xung đột.
+  + rebase --continue: Tiếp tục quá trình rebase.
+  + push origin new_branch -f: (Cẩn trọng) Sau khi rebase thành công, lịch sử trên nhánh cục bộ của bạn đã bị viết lại. Bạn cần sử dụng "force push" (-f hoặc --force) để cập nhật nhánh trên kho lưu trữ origin (kho lưu trữ đã fork của bạn). Chỉ force push lên nhánh của riêng bạn, không bao giờ force push lên các nhánh chung như master hay develop.
+- Push origin new_branch: Đẩy nhánh tính năng đã được rebase của bạn lên kho lưu trữ GitHub cá nhân (origin). Lệnh: $ git push origin new_branch_name (sử dụng -f nếu bạn đã rebase như ở bước 6).
+- Tạo Pull Request: Vào trang GitHub của kho lưu trữ đã fork, bạn sẽ thấy một thông báo đề nghị tạo Pull Request. Nhấp vào đó, điền các thông tin cần thiết (tiêu đề, mô tả) và tạo PR để yêu cầu gộp nhánh của bạn vào nhánh master (hoặc develop) của kho lưu trữ gdo.
+- Làm thế nào để gộp nhiều commit?
+Để giữ cho lịch sử commit gọn gàng trước khi tạo Pull Request, bạn có thể cần gộp nhiều commit nhỏ thành một commit lớn và ý nghĩa hơn.
+  + Gộp vào commit cuối cùng:
+    Lệnh: git commit --amend
+    Cách dùng: Nếu bạn chỉ muốn thêm các thay đổi mới vào commit gần nhất, bạn có thể git add các thay đổi đó rồi chạy lệnh này. Nó sẽ mở trình soạn thảo để bạn sửa lại thông điệp commit.
+  + Gộp nhiều commit tùy chọn (Rebase tương tác):
+    Lệnh: git rebase -i HEAD~n (trong đó n là số commit bạn muốn xem lại).
+    Cách dùng: Lệnh này mở một trình soạn thảo liệt kê n commit gần nhất. Bạn có thể thay đổi từ pick thành squash (hoặc s) cho các commit bạn muốn gộp vào commit phía trên nó. Git sau đó sẽ cho phép bạn viết một thông điệp commit mới cho các commit đã được gộp.
+
+3. Lưu ý 
+- Trước khi git checkout thì 'git status'
+- Trước khi git commit thì 'git log --oneline' (Kiểm tra lịch sử commit)
+- git commit -m "content comment"  // đối với lần commit đầu tiên
+- git commit --amend // đối với lần commit thứ 2 trở đi.
+- Xem nội dung chỉnh sửa mới nhất: git diff file_name
+- Xem thay đổi (chưa được add) của những file hiện tại: git diff
+- Xem thay đổi (đã được add, chưa commit): git diff --cached
+- Xem những files thay đổi giữa hai commits: git diff --name-only COMMIT1_ID COMMIT2_ID
+- Xem thay đổi trước khi push git diff --cached origin/master
+- Lỗi n commit trong 1 pull request: Thực hiện git rebase 2 commit: git rebase -i HEAD~2 (1 PR chỉ có 1 commit)
+- Trước khi push code lên => rebase với branch develop - mới nhất
+  // đứng tại branch của mình git rebase develop
+  có conflict: fix conflict -> git add . -> git rebase --continue
+  không có conflict git push origin name_branch
+- Lỡ push 1 file/folder không cần thiết lên pull request
+  // file
+  git rm --cached file_name
+  // folder
+  git rm -r --cached folder
+- Vô tình fix comment nhầm branch
+  + Chưa chạy lệnh git commit thì chỉ việc git checkout sang branch bị comment
+  + Lỡ bấm commit thì git reflog

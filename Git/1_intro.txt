@@ -1,0 +1,21 @@
+1. Introduction to Version Control
+1.1. Local Version Control Systems
+1.2. Centralized Version Control Systems
+1.3. Distributed Version Control Systems
+
+2. Introduction to Git
+2.1. Lịch sử của Git
+2.2. Sự khác biệt giữa Git và các VCS khác
+2.3. Các trạng thái trong Git (Git States)
+  - Working Directory (Thư mục làm việc): nơi chỉnh sửa, thêm, xóa các tệp.
+  - Staging Area (Khu vực chuẩn bị): tệp, thường nằm trong thư mục .git, chứa thông tin về những gì sẽ được đưa vào lần commit tiếp theo.
+  - .git directory (Repository - Kho lưu trữ): nơi Git lưu trữ siêu dữ liệu và cơ sở dữ liệu đối tượng cho dự án.
+  - Luồng làm việc cơ bản:
+    + $ git checkout: Lệnh này (cùng với các lệnh khác như clone hoặc pull) lấy một phiên bản của dự án từ Repository ra Working Directory.
+    + Bạn thực hiện các thay đổi trong Working Directory.
+    + $ git add: Lệnh này sẽ đưa các thay đổi từ Working Directory vào Staging Area (hành động này được gọi là "stage").
+    + $ git commit: Lệnh này lấy các tệp trong Staging Area và lưu một "snapshot" vĩnh viễn của chúng vào Repository của bạn.
+2.4. Cài đặt Git
+2.5. First-Time Git Setup
+  $ git config --global user.name "John Doe"
+  $ git config --global user.email johndoe@example.com
