@@ -1,0 +1,247 @@
+I. Intro
+1. What’s Database?
+2. What’s RDBMS? (Relational Database Management System)
+3. What’s MySQL?
+
+II. MySQL data type
+1. Numeric
+- Integers: TINYINT, SMAILLINT, MEDIUMINT, INTEGER, BIGINT
+- Floating point values
+  + floating point types: FLOAT (4 bytes), DOUBLE (8 bytes)
+  + fixed-point types: DECIMAL, NUMERIC
+2. Date & Time Values
+- Date: YYYY-MM-DD (1000-01-01 to 9999-12-31)
+- Time: HH:MM:SS
+- Datetime: YYYY-MM-DD HH:MM:SS (1000-01-01
+00:00:00 to 9999-12-31 23:59:59)
+- Year: YYYY (1901 to 2155, or 0000)
+- Timestamp: 1 chuỗi ký tự biểu thị ngày và/hoặc thời gian xảy ra một sự kiện nhất định, thường dùng để ghi nhật ký sự kiện (1970-01-01 00:00:01 UTC to 2038-01-19 03:14:07 UTC)
+3. String
+- Char: fixed length character data type (CHAR(x))
+- Varchar: stores variable-length strings
+- Binary, Varbinary: binary byte data types
+- Blob: binary large object data type (TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB)
+- Text: store large textual data (articles, blogs, pages) (TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT)
+- Enum: string object với giá trị được chọn từ danh sách các giá trị được phép, chỉ có thể chèn 1 giá trị từ danh sách
+- Json: VD: {"lamp": "6", "chair": "5", "table": "4"}
+
+III. Create - Alter - Drop table
+1. Create & Drop Table
+- CREATE: CREATE TABLE Testing(Id INTEGER);
+- DROP: DROP TABLE Testing;
+2. Alter Table
+- add a new column
+- delete a column
+- rename column or table
+- change the type of the table
+3. Inserting Data
+4. Deleting Data
+- delete
+- TRUNCATE
+5. Updating Data
+
+IV. Constraint and Relationship
+1. Not Null Constraint
+2. Unique Constraint
+3. Primary Key Constraint
+4. Foreign Key Constraint
+5. One to many Relationship: using Primary key - Foreign key relationship.
+6. One to one Relationship: using Primary key-Unique foreign key constraints.
+7. Many to Many Relationship
+- Many-to-Many relationship is occurs when multiple records in a table are associated with multiple records in another table
+=> If you change data in one or both side, you can't know that which record they were referring to.
+- To avoid this problem, you can break the many-to-many relationship into two one-to-many relationships by using a third table, called a junction table
+
+V. Select statements
+1. Retrieving data
+2. Selecting specific columns
+- LIMIT [start offset], [number limit] 
+3. Renaming column names
+- AS
+4. Ordering data - Grouping data
+- Ordering data: ORDER BY [column's name] [sort type]
+- Group by data: GROUP BY, must after condition in WHERE clause and must before ORDER BY (if use ORDER BY).
+5. Selecting specific rows with the WHERE Clause
+- LIKE
+6. Removing duplicate items
+- SELECT DISTINCT...
+7. Some function
+avg(), count(), max(), min(), sum(),...
+
+VI. Subqueries
+1. What is subqueries
+2. Scalar subqueries
+Là truy vấn con (subquery) trong SQL mà:
+- Chỉ trả về một giá trị duy nhất (một dòng, một cột).
+- Thường được dùng trong mệnh đề SELECT, WHERE hoặc SET như một biểu thức.
+3. Table subqueries
+4. Subquery with the SELECT statement
+5. Subquery with the INSERT statement
+INSERT INTO Cars2 SELECT * FROM Cars;
+6. Correlated subqueries
+- Truy vấn con tương quan là một truy vấn con mà phụ thuộc vào dữ liệu từ truy vấn cha (outer query). Mỗi lần truy vấn cha duyệt qua một dòng, truy vấn con phải chạy lại và sử dụng giá trị của dòng đó để tính toán.
+7. Subqueries with EXISTS, NOT EXISTS (Correlated subqueries)
+- Subqueries with EXISTS: If a subquery returns any values, then the predicate EXISTS returns TRUE, and NOT EXISTS FALSE.
+- Subqueries with NOT EXISTS
+
+VII. Joining Tables
+1. What is a join?
+To combine rows from two or more tables, with some relationship between them, we use JOIN clause.
+2. Inner Joins
+- INNER JOIN: Kết hợp các dòng trùng nhau ở cả hai bảng (theo điều kiện ON).
+- NATURAL INNER JOIN: Tự động so khớp các cột cùng tên ở cả hai bảng (không cần ON).
+- CROSS INNER JOIN: Tạo tích Đề-các (mỗi dòng bảng A kết hợp với mỗi dòng bảng B).
+3. Outer Joins
+- LEFT OUTER JOIN, USING: Lấy tất cả dòng bên trái, kể cả không khớp. Nếu không khớp → phần bên phải sẽ là NULL.
+- RIGHT OUTER JOIN: Ngược lại: lấy tất cả dòng bên phải, kể cả không khớp.
+4. Natural Joins
+- NATURAL INNER JOIN: Như INNER JOIN, tự động nối theo cột trùng tên
+- NATURAL LEFT OUTER JOIN: Như LEFT JOIN, tự động nối theo cột trùng tên
+- NATURAL RIGHT OUTER JOIN: Như RIGHT JOIN, tự động nối theo cột trùng tên
+
+VIII. View
+1. View definition
+- View bao gồm một truy vấn được lưu trữ, có thể truy cập như một bảng ảo được tạo thành từ tập kết quả của truy vấn.
+- There are several restrictions that apply to views:
+  + The SELECT statement không thể chứa truy vấn con
+  + The SELECT statement không thể tham chiếu đến các biến hệ thống hoặc người dùng
+  + Bất kỳ bảng hoặc view nào tham chiếu trong định nghĩa phải tồn tại
+  + A temporary VIEW cannot be created
+  + A VIEW cannot be associated with a trigger
+2. Creating, modifying and dropping a View
+- CREATE VIEW CheapCars AS SELECT Name FROM Cars WHERE Cost<25000;
+- ALTER VIEW CheapCars AS SELECT Name FROM Cars WHERE Cost<30000;
+3. Finding View
+- SHOW FULL TABLES;
+- SELECT TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES;
+- SELECT TABLE_NAME FROM information_schema.VIEWS;
+4. Creating a View with a union
+CREATE VIEW FavoriteCars AS
+SELECT * FROM Cars WHERE Id=7
+UNION SELECT * FROM Cars WHERE Id=4
+UNION SELECT * FROM Cars WHERE Id=5;
+
+IX. Function
+1. Mathematical functions
+RAND(), ORDER BY RAND(), ABS([number]), PI(), SIN([number]), CEIL([number]), FLOOR([number]), ROUND([number]), DEGREES([number]), ...
+2. Aggregate functions
+MIN([column name]), MAX([column name]), AVG([column name]), SUM([column name]), COUNT([column name]), TRUNCATE([number], [decimal places]), ...
+3. String functions
+LENGTH([string]), UPPER([string]), LOWER([string]), LPAD([string], [length], [pad string]), RPAD, REVERSE(), REPEAT(), LEFT([number]), RIGHT([number]), SUBSTRING([string], [start pos], [number of char]), STRCMP(), CONCAT(), REPLACE([string 1], [string to replace], [replacement string])
+4. Date & Time functions
+NOW(), CURTIME(), CURDATE(), DATEDIFF(), DAYNAME(), MONTHNAME(), WEEKOFYEAR([date]), WEEKDAY([date]), QUARTER([date]), DATE_FORMAT([date], [format]), DATE_ADD([date], INTERVAL [value] [unit]), DATE_SUB(), SUBDATE([date], INTERVAL [value] [unit])
+5. System functions
+VERSION(), USER(), CHARSET(), COLLATION()
+
+X. Stored Routines
+1. Định nghĩa Stored Routines
+- Stored routine là một tập hợp các câu lệnh SQL có thể được lưu trữ trên server.
+- Gồm 2 loại
+  + Stored procedure: được gọi bằng câu lệnh CALL, không trả về giá trị
+  + Stored function: được sử dụng với SELECT và trả về giá trị (bằng return)
+2. A simple procedure
+- CREATE PROCEDURE AllCars() SELECT * FROM Cars;
+- CALL AllCars();
+3. A simple function
+- A function is created with a CREATE FUNCTION
+- A function returns a value. It is called with a SELECT statement.
+DELIMITER $$
+DROP FUNCTION IF EXISTS CircleArea;
+CREATE FUNCTION CircleArea(r DOUBLE) RETURNS DOUBLE
+BEGIN
+DECLARE area DOUBLE;
+SET area = r * r * pi();
+RETURN area;
+END
+$$
+DELIMITER ;
+4. Procedure parameters
+- Có thể làm việc với 3 loại tham số: IN (default), OUT, INOUT
+  + IN: truyền giá trị vào thủ tục từ bên ngoài. Có thể thay đổi giá trị của IN bên trong procedure, nhưng giá trị gốc ở ngoài không thay đổi.
+  + OUT: không truyền gì vào, chỉ nhận giá trị từ procedure trả về. Procedure gán giá trị bên trong, và giá trị đó được truyền ra ngoài.
+  + INOUT: Truyền giá trị vào (giống IN). Có thể thay đổi giá trị đó bên trong procedure. Trả lại giá trị đã thay đổi ra ngoài (giống OUT)
+- VD:
+DELIMITER $$
+DROP PROCEDURE IF EXISTS Pow;
+CREATE PROCEDURE Pow(IN val DOUBLE, OUT p DOUBLE)
+BEGIN
+SET p = val * val;
+END
+$$
+DELIMITER ; 
+- CALL Pow(3, @p); => SELECT @p;
+5. Random numbers
+-- this procedure generates five random numbers from 0 to 9
+DELIMITER $$
+DROP PROCEDURE IF EXISTS FiveRandomNumbers;
+CREATE PROCEDURE FiveRandomNumbers()
+BEGIN
+SET @i = 0;
+REPEAT
+SELECT FLOOR(RAND() * 10) AS 'Random Number';
+SET @i = @i + 1;
+UNTIL @i >=5 END REPEAT;
+END
+$$
+DELIMITER ;
+=> CALL FiveRandomNumbers;
+6. Finding routines
+- SHOW PROCEDURE STATUS, SHOW FUNCTION STATUS
+- SELECT SPECIFIC_NAME from information_schema.ROUTINES WHERE ROUTINE_TYPE='PROCEDURE/FUNCTION';
+
+XI. Index
+1. Basic Concepts of Indexing?
+- Một cấu trúc dữ liệu giúp cải thiện tốc độ của các thao tác truy xuất dữ liệu trên một bảng cơ sở dữ liệu với chi phí là không gian ghi và lưu trữ bổ sung để duy trì cấu trúc dữ liệu chỉ mục.
+2. How it works?
+- Without index: tìm kiếm tuần tự
+- With index: giảm số lượng bản ghi/hàng trong bảng cần được kiểm tra theo thuật toán tìm kiếm ưu tiên
+3. Types of Indexes
+- Thuật toán tìm kiếm: B-tree, Hash, R-tree
+- Loại index: Single Column Index (chỉ mục trên 1 cột), Unique Index (đảm bảo giá trị trong cột là không trùng lặp), Composite Index (chỉ mục trên nhiều cột), Implicit Index (chỉ mục được tạo ngầm định bởi hệ thống, VD: Primary Key, Unique)
+4. Advantages and Disadvantages
+- Ưu điểm: tăng tốc độ truy vấn, sort dữ liệu, ràng buộc toàn vẹn dữ liệu, tăng hiệu suất khi join các bảng
+- Nhược điểm: chiếm dung lượng lưu trữ, khi bạn thêm xóa cập nhật dữ liệu => hệ thống phải cập nhật chỉ mục tương ứng => làm chậm các thao tác này, quản lý phức tạp
+5. Syntax
+- Create index: CREATE INDEX index_name ON table_name;
+- Create single-column index: CREATE INDEX index_name ON table_name (column_name);
+- Create unique index: CREATE UNIQUE INDEX index_name ON table_name (column_name);
+- Create composite index: CREATE INDEX index_name ON table_name (column_name_1, column_name_2);
+- Drop index: DROP INDEX index_name;
+
+XII. Transaction (giao dịch)
+1. Introduction
+- Database systems thường được nhiều users or processes truy cập cùng lúc (cả truy vấn và sửa đổi).
+- Không giống như hệ điều hành, vốn hỗ trợ tương tác giữa các processes, DMBS cần ngăn chặn các processes khỏi những troublesome interactions
+2. ACID in database
+- Atomicity (tính nguyên tử): hoặc tất cả các bước đều thành công, hoặc không có bước nào được thực hiện. Nếu một bước trong giao dịch bị lỗi, toàn bộ giao dịch phải rollback (hoàn tác) về trạng thái ban đầu.
+- Consistency (tính nhất quán): Các ràng buộc của cơ sở dữ liệu được bảo toàn.
+- Isolation (tính cô lập): Các giao dịch không được ảnh hưởng lẫn nhau khi chạy đồng thời. Mỗi giao dịch nên được thực hiện như thể là giao dịch duy nhất đang chạy.
+- Durability (tính bền vững): Dữ liệu không mất sau khi giao dịch thành công
+3. Transactions
+- Giao dịch trong database là 1 chuỗi nhiều thao tác được thực hiện trên database như 1 đơn vị công việc duy nhất
+- Mỗi giao dịch được thực hiện đều yêu cầu thuộc tính ACID được đảm bảo
+- VD: INSERT INTO Users (id,name) VALUES (1, ‘Peter');
+4. How transactions works?
+- Active: first state
+- Partially committed (commit 1 phần): 1 thay đổi đã được thực thi ở trạng thái này, nhưng cơ sở dữ liệu vẫn chưa cam kết thay đổi đó trên đĩa.
+- Committed: transaction updates are permanently stored in the database
+- Failed: If a transaction fails or has been aborted in the active state or partially committed state, it enters into a failed state.
+- Terminated: This is the last and final transaction state after a committed or aborted state.
+5. Advantages and Disadvantages
+- Ưu điểm: Tính toàn vẹn dữ liệu, Khả năng khôi phục dữ liệu, Kiểm soát đồng thời, Tính nguyên tử
+- Nhược điểm: Tài nguyên + hiệu suất, data locking, phát triển phức tạp
+6. Transaction Control
+- COMMIT − to save the changes.
+- ROLLBACK − to roll back the changes : ROLLBACK TO SAVEPOINT_NAME;
+- SAVEPOINT − creates points within the groups of transactions in which to ROLLBACK.
+SAVEPOINT SAVEPOINT_NAME;
+RELEASE SAVEPOINT TEN_SAVEPOINT;
+- SET TRANSACTION − Places a name on a transaction.
+SET TRANSACTION [ READ WRITE | READ ONLY ];
+- BEGIN TRANSACTION - Begin a transaction : BEGIN TRANSACTION || BEGIN WORK
+- END TRANSACTION - End a transaction : END TRANSACTION || END WORK
+
+
+
+
+
